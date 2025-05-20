@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-import os
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,25 +20,29 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%2r-3$z&8b*neg2%3z+891^*9u7t+=*&7s3))=6kj*f8vov^hm'
+SECRET_KEY = 'django-insecure-uhpb&^@zg8v&_7x)m!6ryp9908(^3nn4+xp#r(-+f)&pb%yb)e'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'blog.apps.BlogConfig',
+    'pages.apps.PagesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog.apps.BlogConfig',
-    'pages.apps.PagesConfig',
+    'django_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -53,10 +57,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'blogicum.urls'
 
+TEMPLATES_DIR = BASE_DIR / 'templates'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [TEMPLATES_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -107,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-RU'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Etc/GMT-3'
 
 USE_I18N = True
 
@@ -121,11 +127,33 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+# Specify the view to handle CSRF failures
+
+CSRF_FAILURE_VIEW = 'pages.views.csrf_failure'
+
+# Connecting the filebased.EmailBackend backend:
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+
+# We specify the directory in which the email files will be saved:
+
+EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
+
+LOGIN_REDIRECT_URL = 'blog:index'
+
+MEDIA_ROOT = BASE_DIR / 'media'
+
+LOGIN_URL = 'login'

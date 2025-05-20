@@ -1,56 +1,72 @@
 from django.contrib import admin
 
-from blog.models import Category, Location, Post
+from .models import Post, Location, Category, Comments
 
 
-class PostInline(admin.StackedInline):
+class PostInline(admin.TabularInline):
     model = Post
     extra = 0
 
 
+@admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    inlines = (PostInline,)
+    inlines = (
+        PostInline,
+    )
     list_display = (
         'title',
-        'description',
+        'slug',
         'is_published',
-        'created_at',
     )
-    list_editable = ('is_published',)
-    search_fields = ('title',)
+    list_editable = (
+        'is_published',
+    )
 
 
+@admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
-    inlines = (PostInline,)
+    inlines = (
+        PostInline,
+    )
     list_display = (
         'name',
         'is_published',
-        'created_at',
     )
-    list_editable = ('is_published',)
-    search_fields = ('name',)
+    list_editable = (
+        'is_published',
+    )
 
 
+@admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = (
         'title',
+        'is_published',
+        'created_at',
         'pub_date',
         'author',
         'location',
         'category',
-        'is_published',
-        'created_at',
     )
-    list_editable = ('is_published',)
-    search_fields = ('title', 'text')
-    list_filter = ('category', 'is_published')
-    date_hierarchy = 'pub_date'
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs.select_related('category', 'location', 'author')
+    list_editable = (
+        'is_published',
+        'pub_date',
+        'category',
+        'location',
+    )
 
 
-admin.site.register(Category, CategoryAdmin)
-admin.site.register(Location, LocationAdmin)
-admin.site.register(Post, PostAdmin)
+@admin.register(Comments)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = (
+        'text',
+        'author',
+        'created_at',
+        'post',
+    )
+    list_display_links = (
+        'text',
+    )
+
+
+admin.site.empty_value_display = 'Не задано'
