@@ -18,8 +18,8 @@ User = get_user_model()
 
 
 class PaginatedListView(ListView):
-    """ Базовый класс представления с пагинацией. """
-    
+    """Базовый класс представления с пагинацией."""
+
     paginate_by = 10
 
     def get_paginated_context(self, queryset):
@@ -36,7 +36,7 @@ class PaginatedListView(ListView):
 
 
 class PostListView(PaginatedListView):
-    """ Представление для отображения списка публикаций. """
+    """Представление для отображения списка публикаций."""
 
     model = Post
     template_name = 'blog/index.html'
@@ -58,7 +58,7 @@ class PostListView(PaginatedListView):
 
 
 class ProfileView(PaginatedListView):
-    """ Представление для отображения профиля пользователя и его публикаций. """
+    """Представление для отображения профиля пользователя и публикаций."""
 
     model = Post
     template_name = 'blog/profile.html'
@@ -97,8 +97,8 @@ class ProfileView(PaginatedListView):
 
 
 class CategoryListView(PaginatedListView):
-    """ Представление для отображения публикаций по категориям. """
-    
+    """Представление для отображения публикаций по категориям."""
+
     model = Category
     template_name = 'blog/category.html'
 
